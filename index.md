@@ -99,3 +99,38 @@ Elimina un volumen
 ```console
 $ docker volume rm [volume-name]
 ```
+
+## docker-compose
+
+```docker-compose
+version: "3.5"
+services:
+ jenkins:
+   container_name: jenkins
+   image: jenkins/jenkins:2.122-alpine
+   ports:
+     - 8080:8080
+ artifactory:
+   container_name: artifactory
+   image: docker.bintray.io/jfrog/artifactory-oss:5.10.4
+   ports:
+     - 8081:8081
+ sonar:
+   container_name: sonar
+   image: sonarqube:7.1-alpine
+   environment:
+     - SONARQUBE_JDBC_URL=jdbc:postgresql://sonar_bd:5432/sonar
+   ports:
+     - 9000:9000
+     - 9092:9092
+ sonar_bd:
+   container_name: sonar_bd
+   image: postgres:10.3
+   environment:
+     - POSTGRES_USER=sonar
+     - POSTGRES_PASSWORD=sonar
+```
+
+```console
+$ docker-compose up
+```
